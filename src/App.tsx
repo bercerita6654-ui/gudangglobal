@@ -123,21 +123,11 @@ export function App() {
       const orderSenderPhone = (targetOrder.customer?.phone || '').toLowerCase().trim();
       const orderGudangInfo = (targetOrder.gudangInfo || '').toLowerCase().trim();
 
-      // Check if current user is the owner / inputter of this transaction
-      let isOwner = false;
+      const isServer = role === 'server';
+      let isOwner = isServer;
 
-      if (currentUserName && currentUserName.length >= 2) {
-        if (orderNote.includes(currentUserName) || orderGudangInfo.includes(currentUserName)) {
-          isOwner = true;
-        }
-      }
-
-      if (currentUserPhone && currentUserPhone.length >= 2) {
-        if (
-          orderSenderPhone === currentUserPhone ||
-          orderNote.includes(currentUserPhone) ||
-          orderGudangInfo.includes(currentUserPhone)
-        ) {
+      if (!isServer && currentUserName && currentUserName.length >= 2) {
+        if (orderNote.includes(currentUserName)) {
           isOwner = true;
         }
       }
@@ -160,28 +150,14 @@ export function App() {
     const targetOrder = orders.find((o) => String(o.id) === String(orderId));
 
     if (targetOrder && user) {
+      const isServer = role === 'server';
       const currentUserName = (user.name || '').toLowerCase().trim();
-      const currentUserPhone = (user.phone || '').toLowerCase().trim();
-
       const orderNote = (targetOrder.note || '').toLowerCase().trim();
-      const orderSenderPhone = (targetOrder.customer?.phone || '').toLowerCase().trim();
-      const orderGudangInfo = (targetOrder.gudangInfo || '').toLowerCase().trim();
 
-      // Check if current user is the owner / inputter of this transaction
-      let isOwner = false;
+      let isOwner = isServer;
 
-      if (currentUserName && currentUserName.length >= 2) {
-        if (orderNote.includes(currentUserName) || orderGudangInfo.includes(currentUserName)) {
-          isOwner = true;
-        }
-      }
-
-      if (currentUserPhone && currentUserPhone.length >= 2) {
-        if (
-          orderSenderPhone === currentUserPhone ||
-          orderNote.includes(currentUserPhone) ||
-          orderGudangInfo.includes(currentUserPhone)
-        ) {
+      if (!isServer && currentUserName && currentUserName.length >= 2) {
+        if (orderNote.includes(currentUserName)) {
           isOwner = true;
         }
       }
@@ -337,6 +313,7 @@ export function App() {
         orderId={editOrderId}
         orders={orders}
         user={user}
+        role={role}
         onClose={() => setEditOrderId(null)}
         onSuccess={handleFetchOrders}
         showAlert={showAlert}

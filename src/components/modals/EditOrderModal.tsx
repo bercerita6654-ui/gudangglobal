@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { User, Order, OrderItem } from '../../types';
+import { User, Order, OrderItem, Role } from '../../types';
 import { fetchGAS } from '../../services/api';
 import { X } from 'lucide-react';
 
@@ -7,6 +7,7 @@ interface EditOrderModalProps {
   orderId: string | null;
   orders: Order[];
   user: User;
+  role?: Role;
   onClose: () => void;
   onSuccess: () => void;
   showAlert: (type: 'success' | 'warning', title: string, message: string) => void;
@@ -16,6 +17,7 @@ export const EditOrderModal: React.FC<EditOrderModalProps> = ({
   orderId,
   orders,
   user,
+  role = 'gudang',
   onClose,
   onSuccess,
   showAlert
@@ -67,31 +69,14 @@ export const EditOrderModal: React.FC<EditOrderModalProps> = ({
 
   const handleSubmit = async () => {
     if (order && user) {
+      const isServer = role === 'server';
       const currentUserName = (user.name || '').toLowerCase().trim();
-      const currentUserPhone = (user.phone || '').toLowerCase().trim();
-
       const orderNote = (order.note || '').toLowerCase().trim();
-      const orderSenderPhone = (
-        typeof order.customer === 'object' && order.customer?.phone
-          ? order.customer.phone
-          : ''
-      ).toLowerCase().trim();
-      const orderGudangInfo = (order.gudangInfo || '').toLowerCase().trim();
 
-      let isOwner = false;
+      let isOwner = isServer;
 
-      if (currentUserName && currentUserName.length >= 2) {
-        if (orderNote.includes(currentUserName) || orderGudangInfo.includes(currentUserName)) {
-          isOwner = true;
-        }
-      }
-
-      if (currentUserPhone && currentUserPhone.length >= 2) {
-        if (
-          orderSenderPhone === currentUserPhone ||
-          orderNote.includes(currentUserPhone) ||
-          orderGudangInfo.includes(currentUserPhone)
-        ) {
+      if (!isServer && currentUserName && currentUserName.length >= 2) {
+        if (orderNote.includes(currentUserName)) {
           isOwner = true;
         }
       }
