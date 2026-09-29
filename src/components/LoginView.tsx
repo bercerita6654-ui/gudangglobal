@@ -16,7 +16,7 @@ export const LoginView: React.FC<LoginViewProps> = ({ onLoginSuccess, showAlert 
   const [showPinLogin, setShowPinLogin] = useState(true);
   
   // 2-Step Area & Sub Username Selection
-  const [selectedLoginArea, setSelectedLoginArea] = useState<string>('');
+  const [selectedLoginArea, setSelectedLoginArea] = useState<string>('Barang Masuk');
   const [pinIdentifier, setPinIdentifier] = useState('');
   const [pinPassword, setPinPassword] = useState('');
 
