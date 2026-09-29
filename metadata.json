@@ -1,0 +1,6 @@
+{
+  "name": "Sistem Gudang - Global Mart",
+  "description": "Sistem Manajemen Gudang & Transfer Internal Global Mart",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
