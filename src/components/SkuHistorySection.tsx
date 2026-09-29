@@ -470,7 +470,15 @@ export const SkuHistorySection: React.FC<SkuHistorySectionProps> = ({
                       </div>
                       <div className="max-h-56 overflow-y-auto custom-scrollbar pr-1 space-y-2.5">
                         {itemData.history.map((h) => {
-                          const canManage = true;
+                          const canManage =
+                            isServer ||
+                            isUserInGroup(user.phone, h.senderArea) ||
+                            isUserInGroup(user.name, h.senderArea) ||
+                            isUserInGroup(user.phone, h.senderPic) ||
+                            isUserInGroup(user.name, h.senderPic) ||
+                            (user.name && h.senderPic && h.senderPic.toLowerCase().includes(user.name.toLowerCase())) ||
+                            (user.phone && h.senderArea && h.senderArea.toLowerCase().includes(user.phone.toLowerCase()));
+
                           const proofUrls = parseLaporanUrls(h.laporanUrl);
 
                           return (
